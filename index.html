@@ -228,6 +228,104 @@
       opacity: .6;
       letter-spacing: 8px;
     }
+/* ---------- Carrossel container ---------- */
+  #hero-carousel {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background: #f5ede0; /* fallback enquanto carrega */
+    line-height: 0;      /* remove gap abaixo de img */
+  }
+
+  /* Faixa de slides (flex horizontal) */
+  .hc-track {
+    display: flex;
+    width: 100%;
+    transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+    will-change: transform;
+  }
+
+  /* Cada slide ocupa 100% da largura */
+  .hc-slide {
+    flex: 0 0 100%;
+    width: 100%;
+    position: relative;
+  }
+
+  /* Imagem preenche o slide */
+  .hc-slide img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  /* ---------- Setas de navegação ---------- */
+  .hc-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.55);
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+    transition: background 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .hc-btn:hover {
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  }
+  .hc-btn svg {
+    width: 20px;
+    height: 20px;
+    stroke: #6b4c2a;
+    fill: none;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .hc-btn-prev { left: 16px; }
+  .hc-btn-next { right: 16px; }
+
+  /* ---------- Indicadores (dots) ---------- */
+  .hc-dots {
+    position: absolute;
+    bottom: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+  }
+  .hc-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.55);
+    border: 1.5px solid rgba(120, 80, 30, 0.6);
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+  }
+  .hc-dot.active {
+    background: #c8a96e;
+    transform: scale(1.35);
+    border-color: #c8a96e;
+  }
+
+  /* ---------- Pausa ao hover ---------- */
+  #hero-carousel:hover .hc-track {
+    /* a pausa é feita via JS; este comentário é apenas referência */
+  }
 
     /* ── HERO CAROUSEL ───────────────────────── */
     .hero-carousel {
