@@ -1629,6 +1629,101 @@ document.querySelectorAll('.book-card, .testimonial-card, .author-text, .author-
     </p>
   </div>
 </div>
+<script>
+(function () {
+  'use strict';
+
+  var TOTAL       = 4;          // número de slides
+  var INTERVAL_MS = 5000;       // 5 s entre trocas automáticas
+  var current     = 0;
+  var timer       = null;
+  var paused      = false;
+
+  var track  = document.getElementById('hcTrack');
+  var prev   = document.getElementById('hcPrev');
+  var next   = document.getElementById('hcNext');
+  var dotsEl = document.getElementById('hcDots');
+  var hero   = document.getElementById('hero-carousel');
+
+  /* --- Cria os dots --- */
+  for (var i = 0; i < TOTAL; i++) {
+    var dot = document.createElement('button');
+    dot.className = 'hc-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('role', 'tab');
+    dot.setAttribute('aria-label', 'Slide ' + (i + 1));
+    dot.dataset.idx = i;
+    dot.addEventListener('click', onDotClick);
+    dotsEl.appendChild(dot);
+  }
+
+  /* --- Vai para um slide específico --- */
+  function goTo(idx) {
+    idx = (idx + TOTAL) % TOTAL; // wrap-around
+    current = idx;
+    track.style.transform = 'translateX(-' + (idx * 100) + '%)';
+
+    /* atualiza dots */
+    var dots = dotsEl.querySelectorAll('.hc-dot');
+    dots.forEach(function (d, i) {
+      d.classList.toggle('active', i === idx);
+    });
+  }
+
+  /* --- Auto-play --- */
+  function startAuto() {
+    timer = setInterval(function () {
+      if (!paused) goTo(current + 1);
+    }, INTERVAL_MS);
+  }
+
+  function stopAuto() {
+    clearInterval(timer);
+  }
+
+  /* --- Eventos --- */
+  next.addEventListener('click', function () {
+    goTo(current + 1);
+    stopAuto(); startAuto(); // reinicia o timer ao clicar
+  });
+
+  prev.addEventListener('click', function () {
+    goTo(current - 1);
+    stopAuto(); startAuto();
+  });
+
+  function onDotClick(e) {
+    goTo(parseInt(e.currentTarget.dataset.idx, 10));
+    stopAuto(); startAuto();
+  }
+
+  /* Pausa ao hover */
+  hero.addEventListener('mouseenter', function () { paused = true; });
+  hero.addEventListener('mouseleave', function () { paused = false; });
+
+  /* Suporte a swipe em mobile */
+  var touchStartX = 0;
+  hero.addEventListener('touchstart', function (e) {
+    touchStartX = e.changedTouches[0].clientX;
+  }, { passive: true });
+  hero.addEventListener('touchend', function (e) {
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 40) {
+      goTo(dx < 0 ? current + 1 : current - 1);
+      stopAuto(); startAuto();
+    }
+  }, { passive: true });
+
+  /* Respeita prefers-reduced-motion */
+  var mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (mq && mq.matches) {
+    track.style.transition = 'none';
+  }
+
+  /* Inicia */
+  goTo(0);
+  startAuto();
+})();
+
 
 </body>
 </html>
