@@ -38,8 +38,11 @@
       font-family: var(--ff-body);
       background: var(--cream);
       color: var(--ink);
-      overflow-x: hidden;
     }
+    /* overflow-x must be on html+body together, NOT on body alone —
+       overflow-x: hidden on body alone creates a new stacking context
+       that breaks position:fixed elements (overlay & mobile nav drawer) */
+    html { overflow-x: hidden; }
     a { text-decoration: none; color: inherit; }
     img { display: block; max-width: 100%; }
 
@@ -82,8 +85,7 @@
 
     /* ── HEADER ─────────────────────────────── */
     .topbar {
-      background: rgba(248,247,255,.97);
-      backdrop-filter: blur(12px);
+      background: rgba(248,247,255,1);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -243,13 +245,7 @@
     @media (max-width: 640px) {
       .hero-carousel {
         height: auto;
-        aspect-ratio: 3/2;
-        min-height: 200px;
-        max-height: 380px;
       }
-    }
-    @media (max-width: 400px) {
-      .hero-carousel { aspect-ratio: 4/3; }
     }
     .carousel-slide {
       position: absolute;
@@ -270,8 +266,19 @@
       object-position: center top;
     }
     @media (max-width: 640px) {
+      /* Slides passam a ser estáticos (sem position:absolute) para a imagem ditar a altura */
+      .carousel-slide {
+        position: relative;
+        inset: unset;
+        display: none;
+      }
+      .carousel-slide.active {
+        display: block;
+      }
+      .carousel-slide a { height: auto; }
       .carousel-slide img {
-        object-position: center center;
+        height: auto;
+        object-fit: unset;
       }
     }
     .carousel-btn {
@@ -300,6 +307,7 @@
       .carousel-btn {
         width: 34px; height: 34px;
         font-size: 20px;
+        top: 50%;
       }
       .carousel-btn.prev { left: 8px; }
       .carousel-btn.next { right: 8px; }
@@ -312,7 +320,7 @@
       z-index: 10;
     }
     @media (max-width: 640px) {
-      .carousel-dots { bottom: 8px; gap: 7px; }
+      .carousel-dots { bottom: 10px; gap: 7px; }
     }
     .carousel-dot {
       width: 9px; height: 9px;
@@ -1029,23 +1037,24 @@
       position: fixed;
       inset: 0;
       background: rgba(15,15,46,.6);
-      z-index: 98;
-      backdrop-filter: blur(4px);
+      z-index: 9990;
     }
     .mobile-nav-overlay.open { display: block; }
 
     .mobile-nav {
       position: fixed;
-      top: 0; left: -280px;
+      top: 0; left: 0;
       width: 280px; height: 100%;
       background: #fff;
-      z-index: 99;
+      z-index: 9995;
       padding: 80px 0 40px;
-      transition: left .32s cubic-bezier(.25,.8,.25,1);
+      transform: translateX(-100%);
+      transition: transform .32s cubic-bezier(.25,.8,.25,1);
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
       box-shadow: 4px 0 32px rgba(59,60,136,.15);
     }
-    .mobile-nav.open { left: 0; }
+    .mobile-nav.open { transform: translateX(0); }
     .mobile-nav a {
       display: block;
       padding: 15px 28px;
@@ -1325,22 +1334,6 @@
     </button>
   </div>
 </div>
-
-<!-- ── MOBILE NAV DRAWER ──────────────────────── -->
-<div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileMenu()"></div>
-<nav class="mobile-nav" id="mobileNav">
-  <button class="mobile-nav-close" onclick="closeMobileMenu()">×</button>
-  <div class="mobile-nav-logo">
-    <div class="mobile-nav-logo-title">Fabiana Juraski</div>
-    <div class="mobile-nav-logo-sub">Escritora · Espiritualidade &amp; Desenvolvimento</div>
-  </div>
-  <a href="#" class="active" onclick="closeMobileMenu()">Livros</a>
-  <a href="#" onclick="closeMobileMenu()">Espiritualidade</a>
-  <a href="#" onclick="closeMobileMenu()">Sobre a Autora</a>
-  <a href="#" onclick="closeMobileMenu()">Neurociência</a>
-  <a href="#" onclick="closeMobileMenu()">Resenhas</a>
-  <a href="#" onclick="closeMobileMenu()">Contato</a>
-</nav>
 
 <!-- ── NAV ──────────────────────────────────────── -->
 <nav>
@@ -1776,14 +1769,15 @@ function toggleMobileMenu() {
     nav.classList.add('open');
     overlay.classList.add('open');
     btn.classList.add('open');
-    document.body.style.overflow = 'hidden';
+    /* NÃO usar body overflow:hidden — quebra position:fixed no iOS/Android */
+    document.documentElement.style.overflow = 'hidden';
   }
 }
 function closeMobileMenu() {
   document.getElementById('mobileNav').classList.remove('open');
   document.getElementById('mobileNavOverlay').classList.remove('open');
   document.getElementById('hamburgerBtn').classList.remove('open');
-  document.body.style.overflow = '';
+  document.documentElement.style.overflow = '';
 }
 
 /* ── SCROLL REVEAL ── */
@@ -1877,6 +1871,22 @@ document.querySelectorAll('.book-card, .testimonial-card, .author-text, .author-
     </p>
   </div>
 </div>
+
+<!-- ── MOBILE NAV DRAWER ──────────────────────── -->
+<div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileMenu()"></div>
+<nav class="mobile-nav" id="mobileNav">
+  <button class="mobile-nav-close" onclick="closeMobileMenu()">×</button>
+  <div class="mobile-nav-logo">
+    <div class="mobile-nav-logo-title">Fabiana Juraski</div>
+    <div class="mobile-nav-logo-sub">Escritora · Espiritualidade &amp; Desenvolvimento</div>
+  </div>
+  <a href="#" class="active" onclick="closeMobileMenu()">Livros</a>
+  <a href="#" onclick="closeMobileMenu()">Espiritualidade</a>
+  <a href="#" onclick="closeMobileMenu()">Sobre a Autora</a>
+  <a href="#" onclick="closeMobileMenu()">Neurociência</a>
+  <a href="#" onclick="closeMobileMenu()">Resenhas</a>
+  <a href="#" onclick="closeMobileMenu()">Contato</a>
+</nav>
 
 </body>
 </html>
