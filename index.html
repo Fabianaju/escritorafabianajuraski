@@ -978,16 +978,129 @@
       .footer-grid { grid-template-columns: 1fr 1fr; }
       .author-section { gap: 40px; }
     }
+
+    /* ── MOBILE (≤ 640px) ─────────────────────── */
     @media (max-width: 640px) {
-      .topbar { padding: 12px 20px; }
+
+      /* Topbar: empilha logo ao centro, esconde welcome e search */
+      .topbar {
+        padding: 10px 16px;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+      }
       .topbar-welcome { display: none; }
-      nav a { padding: 12px 14px; font-size: 9px; letter-spacing: 1.5px; }
-      .hero-title { font-size: 34px; }
-      .hero-title .script-word { font-size: 48px; }
-      .book-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
-      .section-title { font-size: 32px; }
-      .footer-grid { grid-template-columns: 1fr; }
-      .author-name { font-size: 44px; }
+      .search-bar { display: none; }
+      .logo-title { font-size: 28px; }
+      .logo-sub { font-size: 6px; letter-spacing: 3px; }
+      .topbar-right { gap: 10px; }
+      .cart-btn span { display: none; } /* esconde texto, mantém ícone */
+      .cart-btn { padding: 9px 14px; min-width: 40px; justify-content: center; }
+
+      /* Nav: scroll horizontal em vez de quebrar */
+      nav {
+        justify-content: flex-start;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      nav::-webkit-scrollbar { display: none; }
+      nav a {
+        padding: 12px 16px;
+        font-size: 9px;
+        letter-spacing: 1.5px;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+
+      /* Hero */
+      .hero-left { padding: 32px 20px 16px; }
+      .hero-right { padding: 16px 20px 36px; }
+      .hero-title { font-size: 30px; }
+      .hero-title .script-word { font-size: 44px; }
+      .hero-author { font-size: 10px; letter-spacing: 2.5px; margin-bottom: 20px; }
+      .hero-desc { font-size: 13px; max-width: 100%; margin-bottom: 24px; }
+      .hero-tags { gap: 6px; margin-bottom: 28px; }
+      .tag { font-size: 9px; padding: 4px 11px; }
+      .hero-cta { flex-direction: column; gap: 10px; }
+      .btn-primary, .btn-outline { width: 100%; justify-content: center; padding: 13px 24px; }
+
+      /* Seções */
+      .section-head { padding: 48px 16px 32px; }
+      .section-title { font-size: 28px; }
+
+      /* Grid de livros: 1 coluna em telas muito pequenas, 2 em telas maiores de 400px */
+      .book-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding-bottom: 48px;
+      }
+      .book-info { padding: 16px 18px 18px; }
+      .book-name { font-size: 16px; }
+
+      /* Quote strip */
+      .quote-strip { padding: 40px 20px; }
+      .quote-text { font-size: 20px; }
+
+      /* Seção autora */
+      .author-section {
+        padding: 48px 20px;
+        flex-direction: column;
+        align-items: center;
+        gap: 32px;
+        text-align: center;
+      }
+      .author-photo-frame { width: 170px; height: 170px; }
+      .author-name { font-size: 40px; }
+      .author-title-line { margin: 0 auto 20px; }
+      .author-desc { font-size: 13px; }
+      .social-row { justify-content: center; }
+
+      /* Depoimentos */
+      .testimonials-section { padding: 0 16px 60px; }
+      .testimonial-card { padding: 24px 20px; }
+
+      /* Newsletter */
+      .newsletter { padding: 48px 20px; }
+      .newsletter h3 { font-size: 28px; }
+      .newsletter-form {
+        flex-direction: column;
+        border-radius: 16px;
+        overflow: hidden;
+        gap: 0;
+      }
+      .newsletter-form input {
+        padding: 14px 18px;
+        border-radius: 0;
+        width: 100%;
+      }
+      .newsletter-form button {
+        padding: 14px 18px;
+        width: 100%;
+        border-radius: 0;
+      }
+
+      /* Footer */
+      footer { padding: 48px 20px 24px; }
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+      .footer-brand p { max-width: 100%; }
+      .footer-bottom { font-size: 10px; line-height: 1.7; }
+
+      /* Modal */
+      .modal { padding: 36px 24px 28px; margin: 16px; }
+    }
+
+    /* ── TELAS MUITO PEQUENAS (≤ 380px) ──────── */
+    @media (max-width: 380px) {
+      .logo-title { font-size: 24px; }
+      .hero-title { font-size: 26px; }
+      .hero-title .script-word { font-size: 38px; }
+      .section-title { font-size: 24px; }
+      .author-name { font-size: 34px; }
+      .quote-text { font-size: 17px; }
     }
   </style>
 </head>
@@ -1025,7 +1138,7 @@
     </button>
     <button class="cart-btn">
       <svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-      Minha Sacola
+      <span>Minha Sacola</span>
     </button>
   </div>
 </header>
