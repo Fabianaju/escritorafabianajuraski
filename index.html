@@ -1031,72 +1031,35 @@
     .hamburger.open span:nth-child(2) { opacity: 0; }
     .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
 
-    /* Mobile nav drawer */
-    .mobile-nav-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(15,15,46,.6);
-      z-index: 9990;
-    }
-    .mobile-nav-overlay.open { display: block; }
+    /* Mobile nav — dropdown abaixo do header (sem position:fixed) */
+    .mobile-nav-overlay { display: none; }
 
     .mobile-nav {
-      position: fixed;
-      top: 0; left: 0;
-      width: 280px; height: 100%;
-      background: #fff;
-      z-index: 9995;
-      padding: 80px 0 40px;
-      transform: translateX(-100%);
-      transition: transform .32s cubic-bezier(.25,.8,.25,1);
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      box-shadow: 4px 0 32px rgba(59,60,136,.15);
+      display: none;
+      background: linear-gradient(180deg, #2A2B6E 0%, #3B3C88 100%);
+      border-top: 2px solid rgba(137,207,240,.3);
     }
-    .mobile-nav.open { transform: translateX(0); }
+    .mobile-nav.open { display: block; }
     .mobile-nav a {
       display: block;
-      padding: 15px 28px;
+      padding: 16px 28px;
       font-family: var(--ff-body);
       font-weight: 500;
-      font-size: 13px;
-      letter-spacing: 2px;
+      font-size: 11px;
+      letter-spacing: 2.5px;
       text-transform: uppercase;
-      color: var(--ink);
-      border-bottom: 1px solid rgba(59,60,136,.07);
-      transition: all .2s;
+      color: rgba(255,255,255,.8);
+      border-bottom: 1px solid rgba(255,255,255,.07);
+      transition: background .2s, color .2s, padding-left .2s;
     }
+    .mobile-nav a:last-of-type { border-bottom: none; }
     .mobile-nav a:hover, .mobile-nav a.active {
-      color: var(--burgundy);
-      background: var(--petal-lt);
-      padding-left: 36px;
+      color: #C9C4E8;
+      background: rgba(255,255,255,.1);
+      padding-left: 38px;
     }
-    .mobile-nav-logo {
-      padding: 0 28px 24px;
-      border-bottom: 1px solid rgba(59,60,136,.1);
-      margin-bottom: 8px;
-    }
-    .mobile-nav-logo-title {
-      font-family: var(--ff-script);
-      font-size: 28px;
-      color: var(--burgundy);
-    }
-    .mobile-nav-logo-sub {
-      font-family: var(--ff-display);
-      font-size: 6px;
-      letter-spacing: 3px;
-      color: var(--gold);
-      text-transform: uppercase;
-      margin-top: 2px;
-    }
-    .mobile-nav-close {
-      position: absolute;
-      top: 20px; right: 20px;
-      background: none; border: none;
-      font-size: 22px; color: var(--muted);
-      cursor: pointer; line-height: 1;
-    }
+    .mobile-nav-logo { display: none; }
+    .mobile-nav-close { display: none; }
 
     /* Mobile search */
     .mobile-search-bar {
@@ -1324,6 +1287,16 @@
     </button>
   </div>
 </header>
+
+<!-- ── MOBILE NAV DROPDOWN ──────────────────────── -->
+<nav class="mobile-nav" id="mobileNav">
+  <a href="#" class="active" onclick="closeMobileMenu()">Livros</a>
+  <a href="#" onclick="closeMobileMenu()">Espiritualidade</a>
+  <a href="#" onclick="closeMobileMenu()">Sobre a Autora</a>
+  <a href="#" onclick="closeMobileMenu()">Neurociência</a>
+  <a href="#" onclick="closeMobileMenu()">Resenhas</a>
+  <a href="#" onclick="closeMobileMenu()">Contato</a>
+</nav>
 
 <!-- ── MOBILE SEARCH ROW ─────────────────────── -->
 <div class="topbar-search-row">
@@ -1761,23 +1734,19 @@ document.querySelector('.newsletter-form button').addEventListener('click', func
 /* ── MOBILE MENU ── */
 function toggleMobileMenu() {
   const nav = document.getElementById('mobileNav');
-  const overlay = document.getElementById('mobileNavOverlay');
   const btn = document.getElementById('hamburgerBtn');
   const isOpen = nav.classList.contains('open');
-  if (isOpen) { closeMobileMenu(); }
-  else {
+  if (isOpen) {
+    nav.classList.remove('open');
+    btn.classList.remove('open');
+  } else {
     nav.classList.add('open');
-    overlay.classList.add('open');
     btn.classList.add('open');
-    /* NÃO usar body overflow:hidden — quebra position:fixed no iOS/Android */
-    document.documentElement.style.overflow = 'hidden';
   }
 }
 function closeMobileMenu() {
   document.getElementById('mobileNav').classList.remove('open');
-  document.getElementById('mobileNavOverlay').classList.remove('open');
   document.getElementById('hamburgerBtn').classList.remove('open');
-  document.documentElement.style.overflow = '';
 }
 
 /* ── SCROLL REVEAL ── */
@@ -1872,21 +1841,7 @@ document.querySelectorAll('.book-card, .testimonial-card, .author-text, .author-
   </div>
 </div>
 
-<!-- ── MOBILE NAV DRAWER ──────────────────────── -->
-<div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileMenu()"></div>
-<nav class="mobile-nav" id="mobileNav">
-  <button class="mobile-nav-close" onclick="closeMobileMenu()">×</button>
-  <div class="mobile-nav-logo">
-    <div class="mobile-nav-logo-title">Fabiana Juraski</div>
-    <div class="mobile-nav-logo-sub">Escritora · Espiritualidade &amp; Desenvolvimento</div>
-  </div>
-  <a href="#" class="active" onclick="closeMobileMenu()">Livros</a>
-  <a href="#" onclick="closeMobileMenu()">Espiritualidade</a>
-  <a href="#" onclick="closeMobileMenu()">Sobre a Autora</a>
-  <a href="#" onclick="closeMobileMenu()">Neurociência</a>
-  <a href="#" onclick="closeMobileMenu()">Resenhas</a>
-  <a href="#" onclick="closeMobileMenu()">Contato</a>
-</nav>
+
 
 </body>
 </html>
