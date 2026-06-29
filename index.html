@@ -994,6 +994,123 @@
     .modal-footer { text-align: center; font-size: 11px; color: var(--muted); margin-top: 18px; }
     .modal-footer a { color: #3B3C88; font-weight: 600; cursor: pointer; }
 
+    /* ── MOBILE SEARCH ROW (só aparece em mobile via media query) ── */
+    .topbar-search-row { display: none; }
+
+    /* ── HAMBURGER MENU ──────────────────────── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 36px; height: 36px;
+      border: 1px solid rgba(59,60,136,.4);
+      border-radius: 50%;
+      background: transparent;
+      cursor: pointer;
+      padding: 8px;
+      transition: all .2s;
+    }
+    .hamburger span {
+      display: block;
+      width: 100%; height: 1.5px;
+      background: var(--burgundy);
+      border-radius: 2px;
+      transition: all .3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    /* Mobile nav drawer */
+    .mobile-nav-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15,15,46,.6);
+      z-index: 98;
+      backdrop-filter: blur(4px);
+    }
+    .mobile-nav-overlay.open { display: block; }
+
+    .mobile-nav {
+      position: fixed;
+      top: 0; left: -280px;
+      width: 280px; height: 100%;
+      background: #fff;
+      z-index: 99;
+      padding: 80px 0 40px;
+      transition: left .32s cubic-bezier(.25,.8,.25,1);
+      overflow-y: auto;
+      box-shadow: 4px 0 32px rgba(59,60,136,.15);
+    }
+    .mobile-nav.open { left: 0; }
+    .mobile-nav a {
+      display: block;
+      padding: 15px 28px;
+      font-family: var(--ff-body);
+      font-weight: 500;
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--ink);
+      border-bottom: 1px solid rgba(59,60,136,.07);
+      transition: all .2s;
+    }
+    .mobile-nav a:hover, .mobile-nav a.active {
+      color: var(--burgundy);
+      background: var(--petal-lt);
+      padding-left: 36px;
+    }
+    .mobile-nav-logo {
+      padding: 0 28px 24px;
+      border-bottom: 1px solid rgba(59,60,136,.1);
+      margin-bottom: 8px;
+    }
+    .mobile-nav-logo-title {
+      font-family: var(--ff-script);
+      font-size: 28px;
+      color: var(--burgundy);
+    }
+    .mobile-nav-logo-sub {
+      font-family: var(--ff-display);
+      font-size: 6px;
+      letter-spacing: 3px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+    .mobile-nav-close {
+      position: absolute;
+      top: 20px; right: 20px;
+      background: none; border: none;
+      font-size: 22px; color: var(--muted);
+      cursor: pointer; line-height: 1;
+    }
+
+    /* Mobile search */
+    .mobile-search-bar {
+      display: none;
+      align-items: center;
+      border: 1px solid rgba(59,60,136,.3);
+      border-radius: 30px;
+      overflow: hidden;
+      background: rgba(255,255,255,.9);
+      width: 100%;
+    }
+    .mobile-search-bar input {
+      flex: 1; border: none; outline: none;
+      padding: 9px 16px; font-size: 13px;
+      font-family: var(--ff-body);
+      background: transparent; color: var(--ink);
+    }
+    .mobile-search-bar input::placeholder { color: var(--muted); }
+    .mobile-search-bar button {
+      background: linear-gradient(135deg, var(--gold), var(--gold-dk));
+      border: none; padding: 10px 16px;
+      cursor: pointer; color: #fff; font-size: 13px;
+    }
+
     /* ── RESPONSIVE ───────────────────────────── */
     @media (max-width: 960px) {
       .hero { grid-template-columns: 1fr; min-height: auto; }
@@ -1010,36 +1127,44 @@
     /* ── MOBILE (≤ 640px) ─────────────────────── */
     @media (max-width: 640px) {
 
-      /* Topbar: empilha logo ao centro, esconde welcome e search */
+      /* Promo strip menor */
+      .promo-strip {
+        font-size: 10px;
+        letter-spacing: 1px;
+        padding: 8px 12px;
+        line-height: 1.5;
+      }
+
+      /* Topbar: logo centro, hamburger direita, busca abaixo */
       .topbar {
         padding: 10px 16px;
         flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0;
       }
       .topbar-welcome { display: none; }
       .search-bar { display: none; }
-      .logo-title { font-size: 28px; }
-      .logo-sub { font-size: 6px; letter-spacing: 3px; }
-      .topbar-right { gap: 10px; }
-      .cart-btn span { display: none; } /* esconde texto, mantém ícone */
-      .cart-btn { padding: 9px 14px; min-width: 40px; justify-content: center; }
+      .logo-wrap { order: 1; flex: 1; text-align: center; }
+      .logo-title { font-size: 26px; }
+      .logo-sub { font-size: 6px; letter-spacing: 2.5px; }
+      .topbar-right { order: 2; gap: 8px; }
+      .icon-btn { width: 32px; height: 32px; }
+      .cart-btn span { display: none; }
+      .cart-btn { padding: 8px 12px; min-width: 36px; justify-content: center; border-radius: 50%; }
+      .hamburger { display: flex; }
 
-      /* Nav: scroll horizontal em vez de quebrar */
-      nav {
-        justify-content: flex-start;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
+      /* Mobile search row abaixo do topbar */
+      .topbar-search-row {
+        display: flex;
+        padding: 6px 16px 10px;
+        background: rgba(248,247,255,.97);
+        border-bottom: 1px solid rgba(59,60,136,.1);
       }
-      nav::-webkit-scrollbar { display: none; }
-      nav a {
-        padding: 12px 16px;
-        font-size: 9px;
-        letter-spacing: 1.5px;
-        white-space: nowrap;
-        flex-shrink: 0;
-      }
+      .mobile-search-bar { display: flex; }
+
+      /* Nav: esconde em mobile (usa drawer) */
+      nav { display: none; }
 
       /* Hero */
       .hero-left { padding: 32px 20px 16px; }
@@ -1051,20 +1176,26 @@
       .hero-tags { gap: 6px; margin-bottom: 28px; }
       .tag { font-size: 9px; padding: 4px 11px; }
       .hero-cta { flex-direction: column; gap: 10px; }
-      .btn-primary, .btn-outline { width: 100%; justify-content: center; padding: 13px 24px; }
+      .btn-primary, .btn-outline { width: 100%; justify-content: center; padding: 14px 24px; font-size: 12px; }
 
       /* Seções */
       .section-head { padding: 48px 16px 32px; }
       .section-title { font-size: 28px; }
 
-      /* Grid de livros: 1 coluna em telas muito pequenas, 2 em telas maiores de 400px */
+      /* Grid de livros: 2 colunas no mobile, 1 em telas muito pequenas */
       .book-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
-        padding-bottom: 48px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+        padding: 0 4px 48px;
       }
-      .book-info { padding: 16px 18px 18px; }
-      .book-name { font-size: 16px; }
+      .book-info { padding: 12px 14px 14px; }
+      .book-name { font-size: 14px; }
+      .book-genre { font-size: 8px; }
+      .book-price { font-size: 16px; }
+      .book-installment { font-size: 10px; }
+      .book-btn { font-size: 9px; padding: 9px 10px; letter-spacing: 0.5px; gap: 5px; }
+      .book-btn svg { width: 11px; height: 11px; }
+      .badge-pill { font-size: 7px; padding: 4px 9px; }
 
       /* Quote strip */
       .quote-strip { padding: 40px 20px; }
@@ -1085,8 +1216,10 @@
       .social-row { justify-content: center; }
 
       /* Depoimentos */
-      .testimonials-section { padding: 0 16px 60px; }
-      .testimonial-card { padding: 24px 20px; }
+      .testimonials-section { padding: 0 12px 60px; }
+      .testimonials-grid { gap: 16px; }
+      .testimonial-card { padding: 22px 18px; }
+      .testimonial-text { font-size: 14px; }
 
       /* Newsletter */
       .newsletter { padding: 48px 20px; }
@@ -1101,6 +1234,7 @@
         padding: 14px 18px;
         border-radius: 0;
         width: 100%;
+        font-size: 14px;
       }
       .newsletter-form button {
         padding: 14px 18px;
@@ -1112,23 +1246,30 @@
       footer { padding: 48px 20px 24px; }
       .footer-grid {
         grid-template-columns: 1fr;
-        gap: 32px;
+        gap: 28px;
       }
       .footer-brand p { max-width: 100%; }
       .footer-bottom { font-size: 10px; line-height: 1.7; }
 
       /* Modal */
-      .modal { padding: 36px 24px 28px; margin: 16px; }
+      .modal {
+        padding: 36px 20px 28px;
+        margin: 12px;
+        border-radius: 16px;
+      }
+      .modal-logo { font-size: 26px; }
     }
 
-    /* ── TELAS MUITO PEQUENAS (≤ 380px) ──────── */
-    @media (max-width: 380px) {
-      .logo-title { font-size: 24px; }
+    /* ── TELAS MUITO PEQUENAS (≤ 400px) ──────── */
+    @media (max-width: 400px) {
+      .logo-title { font-size: 22px; }
       .hero-title { font-size: 26px; }
       .hero-title .script-word { font-size: 38px; }
       .section-title { font-size: 24px; }
       .author-name { font-size: 34px; }
-      .quote-text { font-size: 17px; }
+      .quote-text { font-size: 18px; }
+      /* 1 coluna em telas muito estreitas */
+      .book-grid { grid-template-columns: 1fr; gap: 16px; }
     }
   </style>
 </head>
@@ -1168,8 +1309,37 @@
       <svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
       <span>Minha Sacola</span>
     </button>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Menu" onclick="toggleMobileMenu()">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </header>
+
+<!-- ── MOBILE SEARCH ROW ─────────────────────── -->
+<div class="topbar-search-row">
+  <div class="mobile-search-bar">
+    <input type="text" placeholder="Buscar livros…" />
+    <button>
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="white" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- ── MOBILE NAV DRAWER ──────────────────────── -->
+<div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileMenu()"></div>
+<nav class="mobile-nav" id="mobileNav">
+  <button class="mobile-nav-close" onclick="closeMobileMenu()">×</button>
+  <div class="mobile-nav-logo">
+    <div class="mobile-nav-logo-title">Fabiana Juraski</div>
+    <div class="mobile-nav-logo-sub">Escritora · Espiritualidade &amp; Desenvolvimento</div>
+  </div>
+  <a href="#" class="active" onclick="closeMobileMenu()">Livros</a>
+  <a href="#" onclick="closeMobileMenu()">Espiritualidade</a>
+  <a href="#" onclick="closeMobileMenu()">Sobre a Autora</a>
+  <a href="#" onclick="closeMobileMenu()">Neurociência</a>
+  <a href="#" onclick="closeMobileMenu()">Resenhas</a>
+  <a href="#" onclick="closeMobileMenu()">Contato</a>
+</nav>
 
 <!-- ── NAV ──────────────────────────────────────── -->
 <nav>
@@ -1593,6 +1763,27 @@ document.querySelector('.newsletter-form button').addEventListener('click', func
     setTimeout(() => { input.style.outline = ''; input.placeholder = 'Seu melhor e-mail…'; }, 2000);
   }
 });
+
+/* ── MOBILE MENU ── */
+function toggleMobileMenu() {
+  const nav = document.getElementById('mobileNav');
+  const overlay = document.getElementById('mobileNavOverlay');
+  const btn = document.getElementById('hamburgerBtn');
+  const isOpen = nav.classList.contains('open');
+  if (isOpen) { closeMobileMenu(); }
+  else {
+    nav.classList.add('open');
+    overlay.classList.add('open');
+    btn.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+}
+function closeMobileMenu() {
+  document.getElementById('mobileNav').classList.remove('open');
+  document.getElementById('mobileNavOverlay').classList.remove('open');
+  document.getElementById('hamburgerBtn').classList.remove('open');
+  document.body.style.overflow = '';
+}
 
 /* ── SCROLL REVEAL ── */
 const observer = new IntersectionObserver((entries) => {
